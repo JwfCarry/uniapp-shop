@@ -1,6 +1,7 @@
 <template>
   <view>
     <!-- 滑动区域-->
+    <my-search @click="gotoSearch"></my-search>
     <view class="srcoll-view-container">
       <!-- 左侧-->
       <scroll-view class="left" scroll-y="true" :style="{height: wh + 'px'}">
@@ -73,6 +74,12 @@
       gotoGoodsList(item) {
         uni.navigateTo({
           url: '../../subpkg/goods_list/goods_list?cid=' + item.cat_id
+        })
+      },
+      //点击搜索事件
+      gotoSearch(){
+        uni.navigateTo({
+          url:'../../subpkg/search/search'
         })
       }
     }
