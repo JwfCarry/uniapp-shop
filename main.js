@@ -18,7 +18,7 @@ $http.afterRequest=function(){
   })
 }
 //请求根路径
-$http.baseUrl='https://www.uinav.com'
+$http.baseUrl = 'https://api-hmugo-web.itheima.net'
 //封装请求后弹框消息的方法
 uni.$showMsg = function (title = '数据加载失败！', duration = 1500) {
   uni.showToast({
