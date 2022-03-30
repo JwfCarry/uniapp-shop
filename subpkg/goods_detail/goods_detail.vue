@@ -35,11 +35,34 @@
 </template>
 
 <script>
+  import {
+    mapState,
+    mapMutations,
+    mapGetters
+  } from 'vuex'
   export default {
+    computed: {
+      ...mapGetters('m_cart', ['total']),
+    },
+    watch: {
+      //监听total
+      total:{
+        handler(newValue){
+          const findResult = this.options.find((x) => x.text === '购物车')
+            if (findResult) {
+              // 3. 动态为购物车按钮的 info 属性赋值
+              findResult.info = newValue
+            }
+        },
+          // immediate 属性用来声明此侦听器，是否在页面初次加载完毕后立即调用 解决重现进入一个商品详情页面时 info为0 的状况
+       immediate: true
+      }
+    },
     data() {
       return {
         // 商品详情对象
         goods_info: {},
+        //底部按钮数据
         options: [{
           icon: 'shop',
           text: '店铺',
@@ -49,7 +72,7 @@
         }, {
           icon: 'cart',
           text: '购物车',
-          info: 2
+          info: 0
         }],
         buttonGroup: [{
             text: '加入购物车',
@@ -93,16 +116,29 @@
         })
       },
       //底部区域点击函数
+      //左侧
       onClick(e) {
-        if(e.content.text==='购物车'){
+        if (e.content.text === '购物车') {
           uni.switchTab({
-            url:'../../pages/cart/cart'
+            url: '../../pages/cart/cart'
           })
         }
       },
+      ...mapMutations('m_cart', ['addToCart']),
+      //右侧
       buttonClick(e) {
         console.log(e)
-        this.options[2].info++
+        if (e.content.text === '加入购物车') {
+          const goods = {
+            goods_id: this.goods_info.goods_id, // 商品的Id
+            goods_name: this.goods_info.goods_name, // 商品的名称
+            goods_price: this.goods_info.goods_price, // 商品的价格
+            goods_count: 1, // 商品的数量
+            goods_small_logo: this.goods_info.goods_small_logo, // 商品的图片
+            goods_state: true // 商品的勾选状态
+          }
+          this.addToCart(goods)
+        }
       }
     }
   }
